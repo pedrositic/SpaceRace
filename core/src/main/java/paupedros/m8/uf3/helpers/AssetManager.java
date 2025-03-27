@@ -10,7 +10,7 @@ public class AssetManager {
     public static TextureRegion spacecraft, spacecraftDown,
         spacecraftUp, background;
     public static TextureRegion[] asteroid;
-    public static Animation<TextureRegion> asteroidAnim;
+    public static Animation asteroidAnim;
     public static TextureRegion[] explosion;
     public static Animation explosionAnim;
 
