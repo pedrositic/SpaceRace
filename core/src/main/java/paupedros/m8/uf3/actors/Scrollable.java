@@ -24,7 +24,7 @@ public class Scrollable extends Actor {
     }
 
     public void act(float delta) {
-        position.x -= velocity * delta;
+        position.x += velocity * delta;
         if (position.x + width < 0) {
             leftOfScreen = true;
         }

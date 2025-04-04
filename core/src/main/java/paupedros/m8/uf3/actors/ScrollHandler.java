@@ -32,7 +32,7 @@ public class ScrollHandler extends Group {
 
         // Start with 3 asteroids
         numAsteroids = 3;
-        asteroids = new ArrayList<>();
+        asteroids = new ArrayList<Asteroid>();
 
         // Generate the first asteroid
         float newSize = Methods.randomFloat(Settings.MIN_ASTEROID, Settings.MAX_ASTEROID) * 34;
@@ -81,7 +81,24 @@ public class ScrollHandler extends Group {
         }
     }
 
+    public boolean collides(Spacecraft nau) {
+        for (Asteroid asteroid : asteroids) {
+            if (asteroid.collides(nau)) return true;
+        }
+        return false;
+    }
+
     public ArrayList<Asteroid> getAsteroids() {
         return asteroids;
+    }
+    public void reset() {
+        // Posem el primer asteroide fora de la pantalla per la dreta
+        asteroids.get(0).reset(Settings.GAME_WIDTH);
+        // Calculem les noves posicions de la resta d'asteroides
+        for (int i = 1; i < asteroids.size(); i++) {
+
+            asteroids.get(i).reset(asteroids.get(i - 1).getTailX() + Settings.ASTEROID_GAP);
+
+        }
     }
 }

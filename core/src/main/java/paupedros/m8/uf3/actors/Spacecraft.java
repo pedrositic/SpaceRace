@@ -1,8 +1,11 @@
 package paupedros.m8.uf3.actors;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 
 import paupedros.m8.uf3.helpers.AssetManager;
 import paupedros.m8.uf3.utils.Settings;
@@ -18,6 +21,8 @@ public class Spacecraft extends Actor {
     private int width, height;
     private int direction;
 
+    private Rectangle collisonRect;
+
     public Spacecraft(float x, float y, int width, int height) {
         // Inicialitzem els arguments segons la crida del constructor
         this.width = width;
@@ -26,6 +31,11 @@ public class Spacecraft extends Actor {
 
         // Inicialitzem l'Spacecraft a l'estat normal
         direction = SPACECRAFT_STRAIGHT;
+
+        collisonRect = new Rectangle();
+
+        setBounds(position.x, position.y, width, height);
+        setTouchable(Touchable.enabled);
     }
 
     public void act(float delta) {
@@ -44,12 +54,20 @@ public class Spacecraft extends Actor {
             case SPACECRAFT_STRAIGHT:
                 break;
         }
+
+        collisonRect.set(position.x, position.y + 3, width, 10);
+
+        setBounds(position.x, position.y, width, height);
+    }
+
+    public Rectangle getCollisionRect() {
+        return collisonRect;
     }
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
-        batch.draw(AssetManager.spacecraft, position.x, position.y, width, height);
+        batch.draw(getSpacecraftTexture(), position.x, position.y, width, height);
     }
 
     public Vector2 getPosition() {
@@ -85,5 +103,26 @@ public class Spacecraft extends Actor {
 
     public void goStraight() {
         direction = SPACECRAFT_STRAIGHT;
+    }
+
+    public TextureRegion getSpacecraftTexture() {
+        switch (direction) {
+            case SPACECRAFT_STRAIGHT:
+                return AssetManager.spacecraft;
+            case SPACECRAFT_UP:
+                return AssetManager.spacecraftUp;
+            case SPACECRAFT_DOWN:
+                return AssetManager.spacecraftDown;
+            default:
+                return AssetManager.spacecraft;
+        }
+    }
+
+    public void reset() {
+        // La posem a la posició inicial i a l'estat normal
+        position.x = Settings.SPACECRAFT_STARTX;
+        position.y = Settings.SPACECRAFT_STARTY;
+        direction = SPACECRAFT_STRAIGHT;
+        collisonRect = new Rectangle();
     }
 }
